@@ -199,17 +199,116 @@
                 font-size: 2rem;
             }
         }
+        .about-us {
+            background: #f8f8f8;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .about-us h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .about-us p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .Our-Products {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: .9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Gallery Styling */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .gallery-item {
+            width: 260px; /* Adjusted width */
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%; /* Ensures responsiveness */
+            height: 180px; /* Uniform height */
+            object-fit: cover; /* Keeps aspect ratio */
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-item p {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 <body>
     <header>
         <h1>🎉 Elian Rentals </h1>
         <p>Your One-Stop Party Rental Shop!</p>
     </header>
-
+    <section class="Our-Products">
+        <div class="container">
+            <h2>Our Products</h2>
+                <!-- Gallery Section -->
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="images/Tables-Chairs-8-ft-Long-Table.jpg" alt="Chairs and Tables">
+                    <p>Comfortable chairs and spacious tables for all occasions.</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300" alt="Bounce House">
+                    <p>Fun inflatables to keep the kids entertained.</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/patioHeater.jpg" alt="Outdoor Heaters">
+                    <p>Stay warm with our outdoor heater rentals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
     <div class="container">
         <section class="quote-form">
             <h2>Plan Your Party</h2>
             <form id="quoteRequest">
+                <!-- Confirmation Message -->
+                <div id="confirmation" style="display: none; margin-top: 1rem;">
+                    <p>Thank you for your request! We'll send your quote within 24 hours.</p>
+                </div>
                 <!-- Rental Items -->
                 <div class="form-group">
                     <label>Select Rental Items:</label>
@@ -305,65 +404,124 @@
                 <!-- Submit Button -->
                 <button type="submit">Get Quote</button>
             </form>
-
-            <!-- Confirmation Message -->
-            <div id="confirmation" style="display: none; margin-top: 1rem;">
-                <p>Thank you for your request! We'll send your quote within 24 hours.</p>
-            </div>
         </section>
     </div>
+    <section class="about-us">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>
+                We are a small family-owned business dedicated to making party rentals simple, stress-free, and affordable**.
+                Whether you're planning a birthday party, wedding, or corporate event, we provide high-quality rental items 
+                with friendly, reliable service.
+            </p>
+            <p>
+                Our mission is to bring joy and ease to your celebrations by offering top-tier rental equipment at competitive prices.
+                We take pride in exceptional customer service and ensure that all of our rentals are clean, safe, and ready for your event!
+            </p>
+        </div>
+    </section>
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
-        // Enable/disable quantity inputs based on checkbox state
-        document.querySelectorAll('input[name="item"]').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                const itemId = e.target.value;
-                const qtyInput = document.getElementById(`${itemId}Qty`);
-                const typeSelect = document.getElementById(`${itemId}Type`);
-
-                // Enable/disable quantity input
-                qtyInput.disabled = !e.target.checked;
-
-                // Enable/disable table type select (if applicable)
-                if (typeSelect) typeSelect.disabled = !e.target.checked;
-
-                // Reset quantity to 0 if checkbox is unchecked
-                if (!e.target.checked) {
-                    qtyInput.value = 0;
-                    if (typeSelect) typeSelect.value = 'round'; // Reset table type
+    
+        // Global inventory (max available)
+        const maxInventory = {
+            chair: 100,
+            table: 10,
+            heater: 2,
+            jumper: 1
+        };
+    
+        // Store reservations by date
+        let inventoryByDate = {}; // Example: { "2024-06-15": { chair: 50, table: 5 } }
+    
+        // Function to update inventory based on selected date
+        function updateInventoryDisplay() {
+            const selectedDate = document.getElementById("eventDate").value;
+    
+            // Get reserved inventory for selected date
+            const reserved = inventoryByDate[selectedDate] || {};
+    
+            document.getElementById('availableChairs').innerText = maxInventory.chair - (reserved.chair || 0);
+            document.getElementById('availableTables').innerText = maxInventory.table - (reserved.table || 0);
+            document.getElementById('availableHeaters').innerText = maxInventory.heater - (reserved.heater || 0);
+            document.getElementById('availableJumpers').innerText = maxInventory.jumper - (reserved.jumper || 0);
+    
+            // Disable items if stock is depleted
+            document.querySelectorAll('.rental-item input[type="checkbox"]').forEach(checkbox => {
+                const item = checkbox.value;
+                const remaining = maxInventory[item] - (reserved[item] || 0);
+                checkbox.disabled = remaining <= 0;
+                if (remaining <= 0) {
+                    checkbox.parentElement.innerHTML += " (Out of stock)";
                 }
             });
-        });
-
+        }
+    
+        // Function to disable past dates
+        function disablePastDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("eventDate").setAttribute("min", today);
+        }
+    
+        disablePastDates();
+    
+        // Update inventory when date changes
+        document.getElementById("eventDate").addEventListener("change", updateInventoryDisplay);
+    
         // Handle form submission
         document.getElementById('quoteRequest').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Collect form data
+    
+            const selectedDate = document.getElementById("eventDate").value;
+    
+            const selectedItems = Array.from(document.querySelectorAll('input[name="item"]:checked')).map(item => {
+                return {
+                    name: item.value,
+                    quantity: parseInt(document.getElementById(`${item.value}Qty`).value)
+                };
+            });
+    
+            // Initialize inventory for the selected date if not exists
+            if (!inventoryByDate[selectedDate]) {
+                inventoryByDate[selectedDate] = {};
+            }
+    
+            // Check inventory for the selected date
+            let insufficientStock = selectedItems.find(item => {
+                const reserved = inventoryByDate[selectedDate][item.name] || 0;
+                return reserved + item.quantity > maxInventory[item.name];
+            });
+    
+            if (insufficientStock) {
+                alert(`Sorry, we only have ${maxInventory[insufficientStock.name] - (inventoryByDate[selectedDate][insufficientStock.name] || 0)} ${insufficientStock.name}(s) left for that date.`);
+                return;
+            }
+    
+            // Reserve items for selected date
+            selectedItems.forEach(item => {
+                inventoryByDate[selectedDate][item.name] = (inventoryByDate[selectedDate][item.name] || 0) + item.quantity;
+            });
+    
+            updateInventoryDisplay();
+    
+            // Prepare form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                message: `Event Date: ${document.getElementById('eventDate').value}\n
+                message: `Event Date: ${selectedDate}\n
                           Rental Duration: ${document.getElementById('rentalDays').value} days\n
-                          Selected Items: ${Array.from(document.querySelectorAll('input[name="item"]:checked'))
-                              .map(item => `${item.value} (${document.getElementById(`${item.value}Qty`).value})`)
-                              .join(', ')}\n
-                          Additional Services: ${Array.from(document.querySelectorAll('input[type="checkbox"]:checked:not([name="item"])'))
-                              .map(checkbox => checkbox.value)
-                              .join(', ')}`
+                          Selected Items: ${selectedItems.map(item => `${item.name} (${item.quantity})`).join(', ')}`
             };
-
+    
             try {
-                // Send data to the server
                 const response = await fetch(`${BACKEND_URL}/request-estimate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData),
                 });
-
+    
                 if (response.ok) {
-                    // Show confirmation message
                     document.getElementById('confirmation').style.display = 'block';
                     document.getElementById('quoteRequest').reset();
                     window.scrollTo(0, 0);
