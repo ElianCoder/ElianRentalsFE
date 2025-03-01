@@ -387,9 +387,8 @@
                 <div class="form-group">
                     <label>Additional Services:</label>
                     <div class="amenities-list">
-                        <label><input type="checkbox" value="delivery"> 🚚 Delivery & Setup</label>
-                        <label><input type="checkbox" value="pickup"> 🚛 Pickup</label>
-                        <label><input type="checkbox" value="insurance"> 🛡️ Damage Insurance</label>
+                        <label><input type="radio" name="amenities" value="delivery"> 🚚 Delivery & Setup</label>
+                        <label><input type="radio" name="amenities" value="pickup"> 🚛 Pickup</label>
                     </div>
                 </div>
 
@@ -399,6 +398,9 @@
                     <input type="text" id="name" placeholder="Your Name" required>
                     <input type="email" id="email" placeholder="Your Email" required>
                     <input type="tel" id="phone" placeholder="Your Phone Number" required>
+                </div>
+                <div>
+                    <p>*There will be additional charge on damaged items if any item is damaged</p>
                 </div>
 
                 <!-- Submit Button -->
