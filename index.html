@@ -275,8 +275,21 @@
                 align-items: center;
             }
         }
+        .contact-info {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        } 
     </style>
 <body>
+    
     <header>
         <h1>🎉 Elian Rentals </h1>
         <p>Your One-Stop Party Rental Shop!</p>
@@ -314,7 +327,7 @@
                     <label>Select Rental Items:</label>
                     <div class="rental-items">
                         <!-- Chairs -->
-                        <div class="rental-item">
+                        <div class="rental-item"  onclick="toggleCheckbox('chair', event)">
                             <label>
                                 <input type="checkbox" name="item" value="chair">
                                 🪑 Chairs
@@ -326,7 +339,7 @@
                         </div>
 
                         <!-- Tables -->
-                        <div class="rental-item">
+                        <div class="rental-item" onclick="toggleCheckbox('table', event)">
                             <label>
                                 <input type="checkbox" name="item" value="table">
                                 Tables
@@ -336,13 +349,13 @@
                                 <span>quantity</span>
                             </div>
                             <select id="tableType" disabled>
-                                <option value="round">Round (coming soon)</option>
                                 <option value="square">Square 8ft</option>
+                                <option value="round">Round (coming soon)</option>
                             </select>
                         </div>
 
                         <!-- Heaters -->
-                        <div class="rental-item">
+                        <div class="rental-item"  onclick="toggleCheckbox('heater', event)">
                             <label>
                                 <input type="checkbox" name="item" value="heater">
                                 🔥 Outdoor Heaters
@@ -354,7 +367,7 @@
                         </div>
 
                         <!-- Jumper -->
-                        <div class="rental-item">
+                        <div class="rental-item" onclick="toggleCheckbox('jumper', event)">
                             <label>
                                 <input type="checkbox" name="item" value="jumper">
                                 🏰 Jumper (Bounce House)
@@ -422,111 +435,79 @@
             </p>
         </div>
     </section>
+    <section class="contact-info">
+        <h2>Contact Us</h2>
+        <p>📞 Phone: (650) 532-4299</p>
+        <p>📧 Email: <a href="mailto:CQ@elianventures.com" style="color: #FFE66D; text-decoration: none;">CQ@elianventures.com</a></p>
+    </section>
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
-    
-        // Global inventory (max available)
-        const maxInventory = {
-            chair: 100,
-            table: 10,
-            heater: 2,
-            jumper: 1
-        };
-    
-        // Store reservations by date
-        let inventoryByDate = {}; // Example: { "2024-06-15": { chair: 50, table: 5 } }
-    
-        // Function to update inventory based on selected date
-        function updateInventoryDisplay() {
-            const selectedDate = document.getElementById("eventDate").value;
-    
-            // Get reserved inventory for selected date
-            const reserved = inventoryByDate[selectedDate] || {};
-    
-            document.getElementById('availableChairs').innerText = maxInventory.chair - (reserved.chair || 0);
-            document.getElementById('availableTables').innerText = maxInventory.table - (reserved.table || 0);
-            document.getElementById('availableHeaters').innerText = maxInventory.heater - (reserved.heater || 0);
-            document.getElementById('availableJumpers').innerText = maxInventory.jumper - (reserved.jumper || 0);
-    
-            // Disable items if stock is depleted
-            document.querySelectorAll('.rental-item input[type="checkbox"]').forEach(checkbox => {
-                const item = checkbox.value;
-                const remaining = maxInventory[item] - (reserved[item] || 0);
-                checkbox.disabled = remaining <= 0;
-                if (remaining <= 0) {
-                    checkbox.parentElement.innerHTML += " (Out of stock)";
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check if the form has already been submitted
+            if (localStorage.getItem("quoteSubmitted")) {
+                disableForm();
+            }
+        });
+        // Enable/disable quantity inputs based on checkbox state
+        document.querySelectorAll('input[name="item"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const itemId = e.target.value;
+                const qtyInput = document.getElementById(`${itemId}Qty`);
+                const typeSelect = document.getElementById(`${itemId}Type`);
+
+                // Enable/disable quantity input
+                qtyInput.disabled = !e.target.checked;
+
+                // Enable/disable table type select (if applicable)
+                if (typeSelect) typeSelect.disabled = !e.target.checked;
+
+                // Reset quantity to 0 if checkbox is unchecked
+                if (!e.target.checked) {
+                    qtyInput.value = 0;
+                    if (typeSelect) typeSelect.value = 'round'; // Reset table type
                 }
             });
-        }
-    
-        // Function to disable past dates
-        function disablePastDates() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById("eventDate").setAttribute("min", today);
-        }
-    
-        disablePastDates();
-    
-        // Update inventory when date changes
-        document.getElementById("eventDate").addEventListener("change", updateInventoryDisplay);
-    
+        });
+
         // Handle form submission
         document.getElementById('quoteRequest').addEventListener('submit', async (e) => {
             e.preventDefault();
-    
-            const selectedDate = document.getElementById("eventDate").value;
-    
-            const selectedItems = Array.from(document.querySelectorAll('input[name="item"]:checked')).map(item => {
-                return {
-                    name: item.value,
-                    quantity: parseInt(document.getElementById(`${item.value}Qty`).value)
-                };
-            });
-    
-            // Initialize inventory for the selected date if not exists
-            if (!inventoryByDate[selectedDate]) {
-                inventoryByDate[selectedDate] = {};
-            }
-    
-            // Check inventory for the selected date
-            let insufficientStock = selectedItems.find(item => {
-                const reserved = inventoryByDate[selectedDate][item.name] || 0;
-                return reserved + item.quantity > maxInventory[item.name];
-            });
-    
-            if (insufficientStock) {
-                alert(`Sorry, we only have ${maxInventory[insufficientStock.name] - (inventoryByDate[selectedDate][insufficientStock.name] || 0)} ${insufficientStock.name}(s) left for that date.`);
+                // Check if the request was already sent
+            if (localStorage.getItem("quoteSubmitted")) {
+                alert("You have already submitted a quote request. Please wait for a response. or contact us directly. Thank you!");
                 return;
             }
-    
-            // Reserve items for selected date
-            selectedItems.forEach(item => {
-                inventoryByDate[selectedDate][item.name] = (inventoryByDate[selectedDate][item.name] || 0) + item.quantity;
-            });
-    
-            updateInventoryDisplay();
-    
-            // Prepare form data
+            // Collect form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                message: `Event Date: ${selectedDate}\n
+                message: `Event Date: ${document.getElementById('eventDate').value}\n
                           Rental Duration: ${document.getElementById('rentalDays').value} days\n
-                          Selected Items: ${selectedItems.map(item => `${item.name} (${item.quantity})`).join(', ')}`
+                          Selected Items: ${Array.from(document.querySelectorAll('input[name="item"]:checked'))
+                              .map(item => `${item.value} (${document.getElementById(`${item.value}Qty`).value})`)
+                              .join(', ')}\n
+                          Additional Services: ${Array.from(document.querySelectorAll('input[type="checkbox"]:checked:not([name="item"])'))
+                              .map(checkbox => checkbox.value)
+                              .join(', ')}`
             };
-    
+
             try {
+                // Send data to the server
                 const response = await fetch(`${BACKEND_URL}/request-estimate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData),
                 });
-    
+
                 if (response.ok) {
+                    // Show confirmation message
+                    localStorage.setItem("quoteSubmitted", "true");
+
                     document.getElementById('confirmation').style.display = 'block';
                     document.getElementById('quoteRequest').reset();
                     window.scrollTo(0, 0);
+                    disableForm();
                 } else {
                     alert('Failed to submit the form. Please try again.');
                 }
@@ -535,6 +516,24 @@
                 alert('An error occurred. Please try again.');
             }
         });
+        function toggleCheckbox(item, event) {
+            // Prevent toggling when interacting with inputs or select dropdowns
+            if (event.target.tagName === "INPUT" || event.target.tagName === "SELECT") {
+                return;
+            }
+
+            const checkbox = document.querySelector(`input[name="item"][value="${item}"]`);
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change")); // Trigger the change event to enable/disable inputs
+            }
+        }
+        // Function to disable the form after submission
+        function disableForm() {
+            document.querySelector("button[type='submit']").disabled = true;
+            document.querySelector("button[type='submit']").innerText = "Quote Requested";
+            document.getElementById("quoteRequest").querySelectorAll("input, select").forEach(el => el.disabled = true);
+        }
     </script>
 </body>
 </html>
