@@ -287,6 +287,9 @@
             margin: 0.5rem 0;
             font-size: 1.1rem;
         } 
+        .contact-info h2 {
+    color: #FFE66D; /* or any color you prefer */
+}
     </style>
 <body>
     
@@ -401,7 +404,7 @@
                     <label>Additional Services:</label>
                     <div class="amenities-list">
                         <label><input type="radio" name="amenities" value="delivery"> 🚚 Delivery & Setup</label>
-                        <label><input type="radio" name="amenities" value="pickup"> 🚛 Pickup</label>
+                        <label><input type="radio" name="amenities" value="pickup"> 🚛 Self Pickup</label>
                     </div>
                 </div>
 
@@ -425,8 +428,8 @@
         <div class="container">
             <h2>About Us</h2>
             <p>
-                We are a small family-owned business dedicated to making party rentals simple, stress-free, and affordable**.
-                Whether you're planning a birthday party, wedding, or corporate event, we provide high-quality rental items 
+                We are a small family-owned business dedicated to making party rentals simple, stress-free, and affordable.
+                Whether you're planning a birthday party or corporate event, we provide high-quality rental items 
                 with friendly, reliable service.
             </p>
             <p>
@@ -517,15 +520,17 @@
             }
         });
         function toggleCheckbox(item, event) {
-            // Prevent toggling when interacting with inputs or select dropdowns
-            if (event.target.tagName === "INPUT" || event.target.tagName === "SELECT") {
-                return;
-            }
+            if (event.target.tagName === "INPUT" || event.target.tagName === "SELECT") return;
 
             const checkbox = document.querySelector(`input[name="item"][value="${item}"]`);
+            const qtyInput = document.getElementById(`${item}Qty`);
+
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event("change")); // Trigger the change event to enable/disable inputs
+                checkbox.dispatchEvent(new Event("change")); // enable/disable
+                if (checkbox.checked && qtyInput) {
+                    setTimeout(() => qtyInput.focus(), 100); // delay to ensure it's enabled
+                }
             }
         }
         // Function to disable the form after submission
