@@ -447,7 +447,11 @@
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
         document.addEventListener("DOMContentLoaded", () => {
-            // Check if the form has already been submitted
+            // Set today's date as the minimum for the event date
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("eventDate").setAttribute("min", today);
+
+            // Disable form if already submitted
             if (localStorage.getItem("quoteSubmitted")) {
                 disableForm();
             }
@@ -490,9 +494,7 @@
                           Selected Items: ${Array.from(document.querySelectorAll('input[name="item"]:checked'))
                               .map(item => `${item.value} (${document.getElementById(`${item.value}Qty`).value})`)
                               .join(', ')}\n
-                          Additional Services: ${Array.from(document.querySelectorAll('input[type="checkbox"]:checked:not([name="item"])'))
-                              .map(checkbox => checkbox.value)
-                              .join(', ')}`
+                          Additional Services: ${document.querySelector('input[name="amenities"]:checked')?.value || 'None'}`
             };
 
             try {
