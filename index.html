@@ -199,23 +199,138 @@
                 font-size: 2rem;
             }
         }
+        .about-us {
+            background: #f8f8f8;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .about-us h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .about-us p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .Our-Products {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: .9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Gallery Styling */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .gallery-item {
+            width: 260px; /* Adjusted width */
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%; /* Ensures responsiveness */
+            height: 180px; /* Uniform height */
+            object-fit: cover; /* Keeps aspect ratio */
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-item p {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        .contact-info {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        } 
+        .contact-info h2 {
+    color: #FFE66D; /* or any color you prefer */
+}
     </style>
 <body>
+    
     <header>
         <h1>🎉 Elian Rentals </h1>
         <p>Your One-Stop Party Rental Shop!</p>
     </header>
-
+    <section class="Our-Products">
+        <div class="container">
+            <h2>Our Products</h2>
+                <!-- Gallery Section -->
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="images/Tables-Chairs-8-ft-Long-Table.jpg" alt="Chairs and Tables">
+                    <p>Comfortable chairs and spacious tables for all occasions.</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300" alt="Bounce House">
+                    <p>Fun inflatables to keep the kids entertained.</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/patioHeater.jpg" alt="Outdoor Heaters">
+                    <p>Stay warm with our outdoor heater rentals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
     <div class="container">
         <section class="quote-form">
             <h2>Plan Your Party</h2>
             <form id="quoteRequest">
+                <!-- Confirmation Message -->
+                <div id="confirmation" style="display: none; margin-top: 1rem;">
+                    <p>Thank you for your request! We'll send your quote within 24 hours.</p>
+                </div>
                 <!-- Rental Items -->
                 <div class="form-group">
                     <label>Select Rental Items:</label>
                     <div class="rental-items">
                         <!-- Chairs -->
-                        <div class="rental-item">
+                        <div class="rental-item"  onclick="toggleCheckbox('chair', event)">
                             <label>
                                 <input type="checkbox" name="item" value="chair">
                                 🪑 Chairs
@@ -227,7 +342,7 @@
                         </div>
 
                         <!-- Tables -->
-                        <div class="rental-item">
+                        <div class="rental-item" onclick="toggleCheckbox('table', event)">
                             <label>
                                 <input type="checkbox" name="item" value="table">
                                 Tables
@@ -237,13 +352,13 @@
                                 <span>quantity</span>
                             </div>
                             <select id="tableType" disabled>
-                                <option value="round">Round (coming soon)</option>
                                 <option value="square">Square 8ft</option>
+                                <option value="round">Round (coming soon)</option>
                             </select>
                         </div>
 
                         <!-- Heaters -->
-                        <div class="rental-item">
+                        <div class="rental-item"  onclick="toggleCheckbox('heater', event)">
                             <label>
                                 <input type="checkbox" name="item" value="heater">
                                 🔥 Outdoor Heaters
@@ -255,7 +370,7 @@
                         </div>
 
                         <!-- Jumper -->
-                        <div class="rental-item">
+                        <div class="rental-item" onclick="toggleCheckbox('jumper', event)">
                             <label>
                                 <input type="checkbox" name="item" value="jumper">
                                 🏰 Jumper (Bounce House)
@@ -288,9 +403,8 @@
                 <div class="form-group">
                     <label>Additional Services:</label>
                     <div class="amenities-list">
-                        <label><input type="checkbox" value="delivery"> 🚚 Delivery & Setup</label>
-                        <label><input type="checkbox" value="pickup"> 🚛 Pickup</label>
-                        <label><input type="checkbox" value="insurance"> 🛡️ Damage Insurance</label>
+                        <label><input type="radio" name="amenities" value="delivery"> 🚚 Delivery & Setup</label>
+                        <label><input type="radio" name="amenities" value="pickup"> 🚛 Self Pickup</label>
                     </div>
                 </div>
 
@@ -301,20 +415,43 @@
                     <input type="email" id="email" placeholder="Your Email" required>
                     <input type="tel" id="phone" placeholder="Your Phone Number" required>
                 </div>
+                <div>
+                    <p>*There will be additional charge on damaged items if any item is damaged</p>
+                </div>
 
                 <!-- Submit Button -->
                 <button type="submit">Get Quote</button>
             </form>
-
-            <!-- Confirmation Message -->
-            <div id="confirmation" style="display: none; margin-top: 1rem;">
-                <p>Thank you for your request! We'll send your quote within 24 hours.</p>
-            </div>
         </section>
     </div>
+    <section class="about-us">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>
+                We are a small family-owned business dedicated to making party rentals simple, stress-free, and affordable.
+                Whether you're planning a birthday party or corporate event, we provide high-quality rental items 
+                with friendly, reliable service.
+            </p>
+            <p>
+                Our mission is to bring joy and ease to your celebrations by offering top-tier rental equipment at competitive prices.
+                We take pride in exceptional customer service and ensure that all of our rentals are clean, safe, and ready for your event!
+            </p>
+        </div>
+    </section>
+    <section class="contact-info">
+        <h2>Contact Us</h2>
+        <p>📞 Phone: (650) 532-4299</p>
+        <p>📧 Email: <a href="mailto:CQ@elianventures.com" style="color: #FFE66D; text-decoration: none;">CQ@elianventures.com</a></p>
+    </section>
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check if the form has already been submitted
+            if (localStorage.getItem("quoteSubmitted")) {
+                disableForm();
+            }
+        });
         // Enable/disable quantity inputs based on checkbox state
         document.querySelectorAll('input[name="item"]').forEach(checkbox => {
             checkbox.addEventListener('change', (e) => {
@@ -339,7 +476,11 @@
         // Handle form submission
         document.getElementById('quoteRequest').addEventListener('submit', async (e) => {
             e.preventDefault();
-
+                // Check if the request was already sent
+            if (localStorage.getItem("quoteSubmitted")) {
+                alert("You have already submitted a quote request. Please wait for a response. or contact us directly. Thank you!");
+                return;
+            }
             // Collect form data
             const formData = {
                 name: document.getElementById('name').value,
@@ -364,9 +505,12 @@
 
                 if (response.ok) {
                     // Show confirmation message
+                    localStorage.setItem("quoteSubmitted", "true");
+
                     document.getElementById('confirmation').style.display = 'block';
                     document.getElementById('quoteRequest').reset();
                     window.scrollTo(0, 0);
+                    disableForm();
                 } else {
                     alert('Failed to submit the form. Please try again.');
                 }
@@ -375,6 +519,26 @@
                 alert('An error occurred. Please try again.');
             }
         });
+        function toggleCheckbox(item, event) {
+            if (event.target.tagName === "INPUT" || event.target.tagName === "SELECT") return;
+
+            const checkbox = document.querySelector(`input[name="item"][value="${item}"]`);
+            const qtyInput = document.getElementById(`${item}Qty`);
+
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event("change")); // enable/disable
+                if (checkbox.checked && qtyInput) {
+                    setTimeout(() => qtyInput.focus(), 100); // delay to ensure it's enabled
+                }
+            }
+        }
+        // Function to disable the form after submission
+        function disableForm() {
+            document.querySelector("button[type='submit']").disabled = true;
+            document.querySelector("button[type='submit']").innerText = "Quote Requested";
+            document.getElementById("quoteRequest").querySelectorAll("input, select").forEach(el => el.disabled = true);
+        }
     </script>
 </body>
 </html>
