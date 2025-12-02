@@ -409,113 +409,6 @@
             </div>
         </div>
     </section>
-    <div class="container">
-        <section class="quote-form">
-            <h2>Plan Your Party</h2>
-            <form id="quoteRequest">
-                <!-- Confirmation Message -->
-                <div id="confirmation" style="display: none; margin-top: 1rem;">
-                    <p>Thank you for your request! We'll send your quote within 24 hours.</p>
-                </div>
-                <!-- Rental Items -->
-                <div class="form-group">
-                    <label>Select Rental Items:</label>
-                    <div class="rental-items">
-                        <!-- Chairs -->
-                        <div class="rental-item"  onclick="toggleCheckbox('chair', event)">
-                            <label>
-                                <input type="checkbox" name="item" value="chair">
-                                🪑 Chairs
-                            </label>
-                            <div class="quantity-selector">
-                                <input type="number" id="chairQty" min="0" max="100" value="0">
-                                <span>quantity</span>
-                            </div>
-                        </div>
-
-                        <!-- Tables -->
-                        <div class="rental-item" onclick="toggleCheckbox('table', event)">
-                            <label>
-                                <input type="checkbox" name="item" value="table">
-                                Tables
-                            </label>
-                            <div class="quantity-selector">
-                                <input type="number" id="tableQty" min="0" max="50" value="0" disabled>
-                                <span>quantity</span>
-                            </div>
-                            <select id="tableType" disabled>
-                                <option value="square">Square 8ft</option>
-                                <option value="round">Round (coming soon)</option>
-                            </select>
-                        </div>
-
-                        <!-- Heaters -->
-                        <div class="rental-item"  onclick="toggleCheckbox('heater', event)">
-                            <label>
-                                <input type="checkbox" name="item" value="heater">
-                                🔥 Outdoor Heaters
-                            </label>
-                            <div class="quantity-selector">
-                                <input type="number" id="heaterQty" min="0" max="30" value="0" disabled>
-                                <span>quantity</span>
-                            </div>
-                        </div>
-
-                        <!-- Jumper -->
-                        <div class="rental-item" onclick="toggleCheckbox('jumper', event)">
-                            <label>
-                                <input type="checkbox" name="item" value="jumper">
-                                🏰 Jumper (Bounce House)
-                            </label>
-                            <div class="quantity-selector">
-                                <input type="number" id="jumperQty" min="0" max="5" value="0" disabled>
-                                <span>quantity</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Event Details -->
-                <div class="form-group">
-                    <label>Event Date:</label>
-                    <input type="date" id="eventDate" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Rental Duration:</label>
-                    <select id="rentalDays" required>
-                        <option value="1">1 Day</option>
-                        <option value="2">2 Days</option>
-                        <option value="3">3 Days</option>
-                        <option value="4">4 Days</option>
-                    </select>
-                </div>
-
-                <!-- Additional Services -->
-                <div class="form-group">
-                    <label>Additional Services:</label>
-                    <div class="amenities-list">
-                        <label><input type="radio" name="amenities" value="delivery"> 🚚 Delivery & Setup</label>
-                        <label><input type="radio" name="amenities" value="pickup"> 🚛 Self Pickup</label>
-                    </div>
-                </div>
-
-                <!-- Contact Information -->
-                <div class="form-group">
-                    <label>Contact Information:</label>
-                    <input type="text" id="name" placeholder="Your Name" required>
-                    <input type="email" id="email" placeholder="Your Email" required>
-                    <input type="tel" id="phone" placeholder="Your Phone Number" required>
-                </div>
-                <div>
-                    <p>*There will be additional charge on damaged items if any item is damaged</p>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit">Get Quote</button>
-            </form>
-        </section>
-    </div>
     <section class="about-us">
         <div class="container">
             <h2>About Us</h2>
@@ -538,101 +431,136 @@
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
-        document.addEventListener("DOMContentLoaded", () => {
-            // Set today's date as the minimum for the event date
-            const today = new Date().toISOString().split("T")[0];
-            document.getElementById("eventDate").setAttribute("min", today);
 
-            // Disable form if already submitted
-            if (localStorage.getItem("quoteSubmitted")) {
-                disableForm();
-            }
-        });
-        // Enable/disable quantity inputs based on checkbox state
-        document.querySelectorAll('input[name="item"]').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                const itemId = e.target.value;
-                const qtyInput = document.getElementById(`${itemId}Qty`);
-                const typeSelect = document.getElementById(`${itemId}Type`);
+        const products = {
+            "table-8ft": { id: "table-8ft", name: "8 ft Rectangle Banquet Table", price: 10, category: "Tables" },
+            "chair-standard": { id: "chair-standard", name: "Standard Folding Chair", price: 2, category: "Chairs" },
+            "chair-padded": { id: "chair-padded", name: "Padded Event Chair", price: 2, category: "Chairs" },
+            "jumper-classic": { id: "jumper-classic", name: "Classic Castle Jumper", price: 75, category: "Bouncy Houses" },
+            "heater-basic": { id: "heater-basic", name: "Patio Heater (no propane)", price: 45, category: "Heaters" },
+            "heater-propane": { id: "heater-propane", name: "Patio Heater + Propane Tank", price: 70, category: "Heaters" }
+        };
 
-                // Enable/disable quantity input
-                qtyInput.disabled = !e.target.checked;
+        const cart = {};
 
-                // Enable/disable table type select (if applicable)
-                if (typeSelect) typeSelect.disabled = !e.target.checked;
+        const formatCurrency = (value) => `$${value.toFixed(2)}`;
 
-                // Reset quantity to 0 if checkbox is unchecked
-                if (!e.target.checked) {
-                    qtyInput.value = 0;
-                    if (typeSelect) typeSelect.value = 'round'; // Reset table type
-                }
-            });
-        });
+        function addToCart(productId) {
+            const product = products[productId];
+            const qtyInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(qtyInput?.value, 10);
 
-        // Handle form submission
-        document.getElementById('quoteRequest').addEventListener('submit', async (e) => {
-            e.preventDefault();
-                // Check if the request was already sent
-            if (localStorage.getItem("quoteSubmitted")) {
-                alert("You have already submitted a quote request. Please wait for a response. or contact us directly. Thank you!");
+            if (!product) return;
+
+            if (!quantity || quantity < 1) {
+                alert("Please enter a quantity of at least 1.");
                 return;
             }
-            // Collect form data
+
+            if (cart[productId]) {
+                cart[productId].quantity += quantity;
+            } else {
+                cart[productId] = { ...product, quantity };
+            }
+
+            qtyInput.value = 1;
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            delete cart[productId];
+            updateCartUI();
+        }
+
+        function calculateTotal() {
+            return Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
+        }
+
+        function updateCartUI() {
+            const cartItemsEl = document.getElementById("cartItems");
+            const cartTotalEl = document.getElementById("cartTotal");
+            const items = Object.values(cart);
+
+            cartItemsEl.innerHTML = "";
+
+            if (items.length === 0) {
+                cartItemsEl.innerHTML = '<li class="cart-item"><div class="cart-item-info">Your cart is empty.</div></li>';
+                cartTotalEl.textContent = formatCurrency(0);
+                return;
+            }
+
+            items.forEach(item => {
+                const lineTotal = item.price * item.quantity;
+                const li = document.createElement("li");
+                li.className = "cart-item";
+                li.innerHTML = `
+                    <div class="cart-item-info">
+                        <strong>${item.name}</strong>
+                        <small>${item.quantity} x ${formatCurrency(item.price)} = ${formatCurrency(lineTotal)}</small>
+                    </div>
+                    <div class="cart-actions">
+                        <button type="button" onclick="removeFromCart('${item.id}')">Remove</button>
+                    </div>
+                `;
+                cartItemsEl.appendChild(li);
+            });
+
+            cartTotalEl.textContent = formatCurrency(calculateTotal());
+        }
+
+        function buildCartSummary() {
+            const items = Object.values(cart);
+            return items.map(item => `${item.name} (${item.quantity} x ${formatCurrency(item.price)})`).join(", ");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("eventDate").setAttribute("min", today);
+            updateCartUI();
+        });
+
+        document.getElementById("checkoutForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            if (Object.keys(cart).length === 0) {
+                alert("Please add at least one item to your cart before checking out.");
+                return;
+            }
+
+            const total = calculateTotal();
             const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message: `Event Date: ${document.getElementById('eventDate').value}\n
-                          Rental Duration: ${document.getElementById('rentalDays').value} days\n
-                          Selected Items: ${Array.from(document.querySelectorAll('input[name="item"]:checked'))
-                              .map(item => `${item.value} (${document.getElementById(`${item.value}Qty`).value})`)
-                              .join(', ')}\n
-                          Additional Services: ${document.querySelector('input[name="amenities"]:checked')?.value || 'None'}`
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                message: `Event Date: ${document.getElementById("eventDate").value}\n` +
+                    `Rental Duration: ${document.getElementById("rentalDays").value} days\n` +
+                    `Service Preference: ${document.querySelector('input[name="amenities"]:checked')?.value || "delivery"}\n` +
+                    `Cart: ${buildCartSummary()}\n` +
+                    `Total: ${formatCurrency(total)}\n` +
+                    `Notes: ${document.getElementById("notes").value || "None"}`
             };
 
             try {
-                // Send data to the server
                 const response = await fetch(`${BACKEND_URL}/request-estimate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),
                 });
 
                 if (response.ok) {
-                    // Show confirmation message
-                    localStorage.setItem("quoteSubmitted", "true");
-
-                    document.getElementById('confirmation').style.display = 'block';
-                    document.getElementById('quoteRequest').reset();
-                    window.scrollTo(0, 0);
-                    disableForm();
+                    document.getElementById("confirmation").style.display = "block";
+                    Object.keys(cart).forEach(key => delete cart[key]);
+                    updateCartUI();
+                    e.target.reset();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                 } else {
-                    alert('Failed to submit the form. Please try again.');
+                    alert("Failed to submit your reservation. Please try again.");
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                console.error("Error:", error);
+                alert("An error occurred. Please try again.");
             }
         });
-        function toggleCheckbox(item, event) {
-            if (event.target.tagName === "INPUT" || event.target.tagName === "SELECT") return;
-
-            const checkbox = document.querySelector(`input[name="item"][value="${item}"]`);
-            const qtyInput = document.getElementById(`${item}Qty`);
-
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event("change")); // enable/disable
-                if (checkbox.checked && qtyInput) {
-                    setTimeout(() => qtyInput.focus(), 100); // delay to ensure it's enabled
-                }
-            }
-        }
-        // Function to disable the form after submission
-        function disableForm() {
-            document.querySelector("button[type='submit']").disabled = true;
-            document.querySelector("button[type='submit']").innerText = "Quote Requested";
-            document.getElementById("quoteRequest").querySelectorAll("input, select").forEach(el => el.disabled = true);
-        }
     </script>
 </body>
 </html>
