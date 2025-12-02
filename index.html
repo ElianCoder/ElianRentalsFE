@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celebration Central | Party Rentals</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://www.example.com/favicon.ico">
-    <!-- Google Fonts -->
+    <title>Elian Rentals | Party Rentals</title>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +11,7 @@
             --secondary: #4ECDC4;
             --accent: #FFE66D;
             --dark: #2D3047;
+            --muted: #f3f4f6;
         }
 
         * {
@@ -26,427 +24,521 @@
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             background: linear-gradient(135deg, #fff5f5 0%, #f0fff4 100%);
+            color: var(--dark);
         }
 
         header {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
         }
 
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="5" fill="%23ffffff22"/></svg>');
+        header h1 {
+            font-family: 'Comic Neue', cursive;
+            font-size: 2.75rem;
+            text-shadow: 2px 2px 0 var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem 1.5rem 3rem;
         }
 
-        .quote-form {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-family: 'Comic Neue', cursive;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 0 var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        h2 {
-            color: var(--dark);
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        h2::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .rental-items {
+        .main-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: 2fr 1.2fr;
             gap: 1.5rem;
-            margin: 2rem 0;
         }
 
-        .rental-item {
-            background: white;
-            border: 2px solid #e0e0e0;
+        .section-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
             padding: 1.5rem;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
         }
 
-        .rental-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border-color: var(--primary);
-        }
-
-        .rental-item.selected {
-            border-color: var(--secondary);
-            background: #f8ffff;
-        }
-
-        .quantity-selector {
+        .section-title {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .quantity-selector input {
-            width: 80px;
-            padding: 0.5rem;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-
-        button {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        input[type="checkbox"] {
-            accent-color: var(--secondary);
-            transform: scale(1.2);
-            margin-right: 0.5rem;
-        }
-
-        input, select {
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--accent);
-        }
-
-        #confirmation {
-            background: var(--secondary);
-            color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .quote-form {
-                padding: 1.5rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-        }
-        .about-us {
-            background: #f8f8f8;
-            padding: 3rem 1rem;
-            text-align: center;
-        }
-
-        .about-us h2 {
-            font-size: 2rem;
-            color: var(--dark);
+            justify-content: space-between;
             margin-bottom: 1rem;
         }
 
-        .about-us p {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-            color: #555;
-            line-height: 1.6;
-        }
-        .Our-Products {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: .9rem;
-            color: #555;
-            line-height: 1.6;
+        .section-title h2 {
+            font-size: 1.6rem;
+            color: var(--dark);
         }
 
-        /* Gallery Styling */
-        .gallery {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
+        .section-title small {
+            color: #6b7280;
         }
 
-        .product-dropdowns {
-            background: #fff;
-            padding: 1.5rem;
+        details.product-category {
+            border: 1px solid #e5e7eb;
             border-radius: 14px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-top: 1.5rem;
-        }
-
-        .product-category {
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
             margin-bottom: 1rem;
             overflow: hidden;
+            background: #fff;
         }
 
-        .product-category summary {
+        details.product-category summary {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: #fff;
-            padding: 1rem;
+            padding: 0.9rem 1rem;
             cursor: pointer;
             font-weight: 600;
             list-style: none;
         }
 
-        .product-category summary::-webkit-details-marker {
+        details.product-category summary::-webkit-details-marker {
             display: none;
         }
 
-        .product-category summary::after {
+        details.product-category summary::after {
             content: '\25be';
             float: right;
             transition: transform 0.2s ease;
         }
 
-        .product-category[open] summary::after {
+        details[open].product-category summary::after {
             transform: rotate(180deg);
         }
 
-        .product-list {
+        .product-grid {
             padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.75rem;
+            background: var(--muted);
+        }
+
+        .product-card {
             background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.75rem;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem;
+            align-items: center;
         }
 
-        .product-list ul {
-            margin-left: 1rem;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .gallery-item {
-            width: 260px; /* Adjusted width */
-            background: white;
-            padding: 1rem;
+        .product-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 2px solid #f3f4f6;
         }
 
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        .product-info h3 {
+            font-size: 1.05rem;
+            margin-bottom: 0.2rem;
         }
 
-        .gallery-item img {
-            width: 100%; /* Ensures responsiveness */
-            height: 180px; /* Uniform height */
-            object-fit: cover; /* Keeps aspect ratio */
-            border-radius: 10px; /* Rounded corners */
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.08);
-        }
-
-        .gallery-item p {
-            margin-top: 0.5rem;
+        .product-info p {
+            color: #6b7280;
             font-size: 0.95rem;
-            color: #333;
+            margin-bottom: 0.25rem;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .gallery {
-                flex-direction: column;
-                align-items: center;
-            }
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
-        .contact-info {
-            background: var(--dark);
+
+        .price-tag {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.35rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 0.45rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .pill-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
+            padding: 0.55rem 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 700;
+        }
+
+        .pill-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .cart-box {
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .cart-list {
+            list-style: none;
+            margin: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #f9fafb;
+        }
+
+        .cart-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-item small {
+            color: #6b7280;
+        }
+
+        .cart-actions button {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.75rem;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .cart-total {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-top: 0.5rem;
+        }
+
+        form.checkout-form {
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        form.checkout-form label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+
+        form.checkout-form input,
+        form.checkout-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        form.checkout-form textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .radio-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-row label {
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        #confirmation {
+            background: var(--secondary);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
             text-align: center;
-            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
             margin-top: 2rem;
         }
 
-        .contact-info p {
-            margin: 0.5rem 0;
-            font-size: 1.1rem;
-        } 
-        .contact-info h2 {
-    color: #FFE66D; /* or any color you prefer */
-}
+        .info-card {
+            background: #fff;
+            padding: 1.2rem;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--dark);
+        }
+
+        .contact-info a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+</head>
 <body>
-    
     <header>
-        <h1>🎉 Elian Rentals </h1>
-        <p>Your One-Stop Party Rental Shop!</p>
+        <h1>🎉 Elian Rentals</h1>
+        <p>Seamless party rentals with instant cart and quick checkout—no login needed.</p>
     </header>
-    <section class="Our-Products">
-        <div class="container">
-            <h2>Our Products</h2>
-            <div class="product-dropdowns">
-                <details class="product-category" open>
-                    <summary>Tables</summary>
-                    <div class="product-list">
-                        <ul>
-                            <li>8 ft Rectangle Banquet Tables</li>
-                            <li>Round Tables (coming soon)</li>
-                            <li>Kid-sized Tables</li>
-                        </ul>
-                    </div>
-                </details>
 
-                <details class="product-category">
-                    <summary>Chairs</summary>
-                    <div class="product-list">
-                        <ul>
-                            <li>Standard Folding Chairs</li>
-                            <li>Padded Event Chairs</li>
-                        </ul>
-                    </div>
-                </details>
-
-                <details class="product-category">
-                    <summary>Bouncy Houses</summary>
-                    <div class="product-list">
-                        <ul>
-                            <li>Classic Castle Jumper</li>
-                            <li>Toddler-Friendly Jumper</li>
-                        </ul>
-                    </div>
-                </details>
-
-                <details class="product-category">
-                    <summary>Heaters</summary>
-                    <div class="product-list">
-                        <ul>
-                            <li>Patio Heaters</li>
-                            <li>Propane Tanks (available with rental)</li>
-                        </ul>
-                    </div>
-                </details>
+    <main class="container">
+        <div class="section-card section-title">
+            <div>
+                <h2>Build your rental bundle</h2>
+                <small>Tap a category below to see items, preview thumbnails, and add what you need.</small>
             </div>
+            <div class="price-tag">Transparent pricing: Chairs $2 · Tables $10 · Heaters $45 / $70 · Jumper $75</div>
+        </div>
 
-            <!-- Gallery Section -->
-            <div class="gallery">
-                <div class="gallery-item">
-                    <img src="images/Tables-Chairs-8-ft-Long-Table.jpg" alt="Chairs and Tables">
-                    <p>Comfortable chairs and spacious tables for all occasions.</p>
+        <div class="main-grid">
+            <section class="product-browser">
+                <div id="productCategories"></div>
+            </section>
+
+            <section class="cart-panel">
+                <div class="cart-box">
+                    <div class="section-title">
+                        <h2>Your Cart</h2>
+                        <small>Review totals anytime</small>
+                    </div>
+                    <ul id="cartItems" class="cart-list"></ul>
+                    <div class="cart-total">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
                 </div>
-                <div class="gallery-item">
-                    <img src="https://via.placeholder.com/300" alt="Bounce House">
-                    <p>Fun inflatables to keep the kids entertained.</p>
-                </div>
-                <div class="gallery-item">
-                    <img src="images/patioHeater.jpg" alt="Outdoor Heaters">
-                    <p>Stay warm with our outdoor heater rentals.</p>
-                </div>
+
+                <form id="checkoutForm" class="checkout-form">
+                    <div class="section-title" style="margin-bottom: 0;">
+                        <h2>Checkout details</h2>
+                        <small>Hold your date in seconds</small>
+                    </div>
+                    <div>
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text" placeholder="Full name" required>
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                    </div>
+                    <div>
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="phone" type="tel" placeholder="(650) 555-1234" required>
+                    </div>
+                    <div>
+                        <label for="eventDate">Event date</label>
+                        <input id="eventDate" name="eventDate" type="date" required>
+                    </div>
+                    <div>
+                        <label for="rentalDays">Rental duration (days)</label>
+                        <input id="rentalDays" name="rentalDays" type="number" min="1" value="1" required>
+                    </div>
+                    <div>
+                        <label>Service preference</label>
+                        <div class="radio-row">
+                            <label><input type="radio" name="amenities" value="delivery" checked> Delivery & setup</label>
+                            <label><input type="radio" name="amenities" value="pickup"> Customer pickup</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="notes">Notes (access info, timing, etc.)</label>
+                        <textarea id="notes" name="notes" placeholder="Tell us about your event, venue access, or special requests"></textarea>
+                    </div>
+                    <button class="pill-button" type="submit">Submit my cart</button>
+                    <div id="confirmation">Thanks! Your request is on its way. We will confirm availability shortly.</div>
+                </form>
+            </section>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Fast, login-free checkout</h3>
+                <p>Add items, set your date, and submit in one flow. We email you a confirmation with your full cart and total.</p>
+            </div>
+            <div class="info-card">
+                <h3>Dependable delivery</h3>
+                <p>Schedule the drop-off time that works for you. We handle set up for tables, chairs, heaters, and the jumper.</p>
+            </div>
+            <div class="info-card">
+                <h3>Clean & party-ready</h3>
+                <p>Every rental is inspected and cleaned before it goes out so your event looks polished from the start.</p>
             </div>
         </div>
-    </section>
-    <section class="about-us">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>
-                We are a small family-owned business dedicated to making party rentals simple, stress-free, and affordable.
-                Whether you're planning a birthday party or corporate event, we provide high-quality rental items 
-                with friendly, reliable service.
-            </p>
-            <p>
-                Our mission is to bring joy and ease to your celebrations by offering top-tier rental equipment at competitive prices.
-                We take pride in exceptional customer service and ensure that all of our rentals are clean, safe, and ready for your event!
-            </p>
+
+        <div class="contact-info">
+            <h3>Need help or rush delivery?</h3>
+            <p>Call us at (650) 532-4299 or email <a href="mailto:CQ@elianventures.com">CQ@elianventures.com</a>.</p>
         </div>
-    </section>
-    <section class="contact-info">
-        <h2>Contact Us</h2>
-        <p>📞 Phone: (650) 532-4299</p>
-        <p>📧 Email: <a href="mailto:CQ@elianventures.com" style="color: #FFE66D; text-decoration: none;">CQ@elianventures.com</a></p>
-    </section>
+    </main>
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
 
-        const products = {
-            "table-8ft": { id: "table-8ft", name: "8 ft Rectangle Banquet Table", price: 10, category: "Tables" },
-            "chair-standard": { id: "chair-standard", name: "Standard Folding Chair", price: 2, category: "Chairs" },
-            "chair-padded": { id: "chair-padded", name: "Padded Event Chair", price: 2, category: "Chairs" },
-            "jumper-classic": { id: "jumper-classic", name: "Classic Castle Jumper", price: 75, category: "Bouncy Houses" },
-            "heater-basic": { id: "heater-basic", name: "Patio Heater (no propane)", price: 45, category: "Heaters" },
-            "heater-propane": { id: "heater-propane", name: "Patio Heater + Propane Tank", price: 70, category: "Heaters" }
-        };
+        const products = [
+            {
+                id: "table-8ft",
+                name: "8 ft Rectangle Banquet Table",
+                price: 10,
+                category: "Tables",
+                blurb: "Seats 8-10 guests with plenty of surface space.",
+                image: "images/Tables-Chairs-8-ft-Long-Table.jpg"
+            },
+            {
+                id: "chair-standard",
+                name: "Standard Folding Chair",
+                price: 2,
+                category: "Chairs",
+                blurb: "Sturdy, clean seating that works with any table setup.",
+                image: "images/Tables-Chairs-8-ft-Long-Table.jpg"
+            },
+            {
+                id: "chair-padded",
+                name: "Padded Event Chair",
+                price: 2,
+                category: "Chairs",
+                blurb: "Extra comfort for longer events at the same great rate.",
+                image: "https://via.placeholder.com/90x90?text=Chair"
+            },
+            {
+                id: "heater-basic",
+                name: "Patio Heater (no propane)",
+                price: 45,
+                category: "Heaters",
+                blurb: "Great for patios and evening gatherings.",
+                image: "images/patioHeater.jpg"
+            },
+            {
+                id: "heater-propane",
+                name: "Patio Heater + Propane Tank",
+                price: 70,
+                category: "Heaters",
+                blurb: "Includes a filled propane tank for all-night warmth.",
+                image: "images/patioHeater.jpg"
+            },
+            {
+                id: "jumper-classic",
+                name: "Classic Castle Jumper",
+                price: 75,
+                category: "Inflatables",
+                blurb: "A kid-favorite centerpiece that keeps the fun going.",
+                image: "https://via.placeholder.com/90x90?text=Jumper"
+            }
+        ];
 
         const cart = {};
 
         const formatCurrency = (value) => `$${value.toFixed(2)}`;
 
+        function renderProducts() {
+            const container = document.getElementById("productCategories");
+            const categories = products.reduce((grouped, item) => {
+                if (!grouped[item.category]) grouped[item.category] = [];
+                grouped[item.category].push(item);
+                return grouped;
+            }, {});
+
+            container.innerHTML = "";
+
+            Object.entries(categories).forEach(([category, items], index) => {
+                const details = document.createElement("details");
+                details.className = "product-category";
+                if (index === 0) details.open = true;
+
+                const summary = document.createElement("summary");
+                summary.textContent = category;
+                details.appendChild(summary);
+
+                const grid = document.createElement("div");
+                grid.className = "product-grid";
+
+                items.forEach((item) => {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+
+                    const image = document.createElement("img");
+                    image.src = item.image;
+                    image.alt = item.name;
+
+                    const info = document.createElement("div");
+                    info.className = "product-info";
+                    info.innerHTML = `
+                        <h3>${item.name}</h3>
+                        <p>${item.blurb}</p>
+                        <div class="price-row">
+                            <span class="price-tag">${formatCurrency(item.price)}</span>
+                            <input id="qty-${item.id}" class="quantity-input" type="number" min="1" value="1" aria-label="Quantity for ${item.name}">
+                            <button class="pill-button" type="button" onclick="addToCart('${item.id}')">Add to cart</button>
+                        </div>
+                    `;
+
+                    card.appendChild(image);
+                    card.appendChild(info);
+                    grid.appendChild(card);
+                });
+
+                details.appendChild(grid);
+                container.appendChild(details);
+            });
+        }
+
         function addToCart(productId) {
-            const product = products[productId];
+            const product = products.find((p) => p.id === productId);
             const qtyInput = document.getElementById(`qty-${productId}`);
             const quantity = parseInt(qtyInput?.value, 10);
 
@@ -514,6 +606,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            renderProducts();
             const today = new Date().toISOString().split("T")[0];
             document.getElementById("eventDate").setAttribute("min", today);
             updateCartUI();
