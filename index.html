@@ -278,139 +278,10 @@
             background: #fff;
         }
 
-        .product-grid {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .product-card {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border: 1px solid #f1f1f1;
-            border-radius: 10px;
-            padding: 0.75rem;
-            background: #fafafa;
-        }
-
-        .product-card img {
-            width: 64px;
-            height: 64px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .product-info {
-            flex: 1;
-        }
-
-        .product-info h4 {
-            margin: 0 0 0.25rem 0;
-            color: var(--dark);
-        }
-
-        .product-info p {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .product-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .product-actions input[type="number"] {
-            width: 70px;
-        }
-
-        .shop-layout {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .cart-panel {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 14px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
-            border: 1px solid #f0f0f0;
-        }
-
-        .cart-panel h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .cart-items {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 1rem 0;
-            max-height: 260px;
-            overflow-y: auto;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #eee;
-            gap: 0.75rem;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item strong {
-            display: block;
-            color: var(--dark);
-        }
-
-        .cart-item small {
-            color: #666;
-        }
-
-        .cart-actions button {
-            padding: 0.35rem 0.65rem;
-            font-size: 0.9rem;
-        }
-
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .checkout-grid {
-            display: grid;
-            gap: 0.75rem;
-        }
-
-        .checkout-grid label {
-            display: block;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.25rem;
-        }
-
-        .amenities-list {
-            display: flex;
-            gap: 1rem;
-        }
-
-        @media (max-width: 992px) {
-            .shop-layout {
-                grid-template-columns: 1fr;
-            }
+        .product-list ul {
+            margin-left: 1rem;
+            color: #333;
+            line-height: 1.5;
         }
 
         .gallery-item {
@@ -478,162 +349,47 @@
     <section class="Our-Products">
         <div class="container">
             <h2>Our Products</h2>
-            <div class="shop-layout">
-                <div>
-                    <p>Browse our catalog, add what you need to your cart, and reserve your rentals in one seamless flow.</p>
-                    <div class="product-dropdowns">
-                        <details class="product-category" open>
-                            <summary>Tables</summary>
-                            <div class="product-list">
-                                <div class="product-grid">
-                                    <div class="product-card">
-                                        <img src="images/Tables-Chairs-8-ft-Long-Table.jpg" alt="8 ft Rectangle Banquet Table">
-                                        <div class="product-info">
-                                            <h4>8 ft Rectangle Banquet Table</h4>
-                                            <p>$10 per table</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-table-8ft" min="1" value="1">
-                                            <button type="button" onclick="addToCart('table-8ft')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                        <details class="product-category">
-                            <summary>Chairs</summary>
-                            <div class="product-list">
-                                <div class="product-grid">
-                                    <div class="product-card">
-                                        <img src="https://via.placeholder.com/80?text=Chair" alt="Standard Folding Chair">
-                                        <div class="product-info">
-                                            <h4>Standard Folding Chair</h4>
-                                            <p>$2 each</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-chair-standard" min="1" value="1">
-                                            <button type="button" onclick="addToCart('chair-standard')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                    <div class="product-card">
-                                        <img src="https://via.placeholder.com/80?text=Padded+Chair" alt="Padded Event Chair">
-                                        <div class="product-info">
-                                            <h4>Padded Event Chair</h4>
-                                            <p>$2 each</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-chair-padded" min="1" value="1">
-                                            <button type="button" onclick="addToCart('chair-padded')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                        <details class="product-category">
-                            <summary>Bouncy Houses</summary>
-                            <div class="product-list">
-                                <div class="product-grid">
-                                    <div class="product-card">
-                                        <img src="https://via.placeholder.com/80?text=Jumper" alt="Classic Castle Jumper">
-                                        <div class="product-info">
-                                            <h4>Classic Castle Jumper</h4>
-                                            <p>$75 per day</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-jumper-classic" min="1" value="1">
-                                            <button type="button" onclick="addToCart('jumper-classic')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                        <details class="product-category">
-                            <summary>Heaters</summary>
-                            <div class="product-list">
-                                <div class="product-grid">
-                                    <div class="product-card">
-                                        <img src="images/patioHeater.jpg" alt="Patio Heater">
-                                        <div class="product-info">
-                                            <h4>Patio Heater (no propane)</h4>
-                                            <p>$45 each</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-heater-basic" min="1" value="1">
-                                            <button type="button" onclick="addToCart('heater-basic')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                    <div class="product-card">
-                                        <img src="images/patioHeater.jpg" alt="Patio Heater with propane tank">
-                                        <div class="product-info">
-                                            <h4>Patio Heater + Propane Tank</h4>
-                                            <p>$70 each</p>
-                                        </div>
-                                        <div class="product-actions">
-                                            <input type="number" id="qty-heater-propane" min="1" value="1">
-                                            <button type="button" onclick="addToCart('heater-propane')">Add to Cart</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
+            <div class="product-dropdowns">
+                <details class="product-category" open>
+                    <summary>Tables</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>8 ft Rectangle Banquet Tables</li>
+                            <li>Round Tables (coming soon)</li>
+                            <li>Kid-sized Tables</li>
+                        </ul>
                     </div>
-                </div>
-                <div class="cart-panel">
-                    <h3>Your Cart</h3>
-                    <ul id="cartItems" class="cart-items"></ul>
-                    <div class="cart-total">
-                        <span>Total</span>
-                        <span id="cartTotal">$0.00</span>
+                </details>
+
+                <details class="product-category">
+                    <summary>Chairs</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Standard Folding Chairs</li>
+                            <li>Padded Event Chairs</li>
+                        </ul>
                     </div>
-                    <form id="checkoutForm" class="checkout-grid">
-                        <div id="confirmation" style="display: none; margin-bottom: 0.5rem;">
-                            <p>Thanks! Your reservation details have been sent.</p>
-                        </div>
-                        <div>
-                            <label for="eventDate">Event Date</label>
-                            <input type="date" id="eventDate" required>
-                        </div>
-                        <div>
-                            <label for="rentalDays">Rental Duration</label>
-                            <select id="rentalDays" required>
-                                <option value="1">1 Day</option>
-                                <option value="2">2 Days</option>
-                                <option value="3">3 Days</option>
-                                <option value="4">4 Days</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Service Preference</label>
-                            <div class="amenities-list">
-                                <label><input type="radio" name="amenities" value="delivery" checked> 🚚 Delivery & Setup</label>
-                                <label><input type="radio" name="amenities" value="pickup"> 🚛 Self Pickup</label>
-                            </div>
-                        </div>
-                        <div>
-                            <label for="name">Name</label>
-                            <input type="text" id="name" placeholder="Your Name" required>
-                        </div>
-                        <div>
-                            <label for="email">Email</label>
-                            <input type="email" id="email" placeholder="you@example.com" required>
-                        </div>
-                        <div>
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone" placeholder="Your Phone Number" required>
-                        </div>
-                        <div>
-                            <label for="notes">Event Notes</label>
-                            <input type="text" id="notes" placeholder="Location, time window, special requests">
-                        </div>
-                        <div>
-                            <p style="font-size: 0.9rem; color: #555;">* Additional charges may apply for damaged items.</p>
-                        </div>
-                        <button type="submit">Reserve Now</button>
-                    </form>
-                </div>
+                </details>
+
+                <details class="product-category">
+                    <summary>Bouncy Houses</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Classic Castle Jumper</li>
+                            <li>Toddler-Friendly Jumper</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="product-category">
+                    <summary>Heaters</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Patio Heaters</li>
+                            <li>Propane Tanks (available with rental)</li>
+                        </ul>
+                    </div>
+                </details>
             </div>
 
             <!-- Gallery Section -->
