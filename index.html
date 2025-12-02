@@ -235,6 +235,55 @@
             flex-wrap: wrap;
         }
 
+        .product-dropdowns {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 1.5rem;
+        }
+
+        .product-category {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .product-category summary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            list-style: none;
+        }
+
+        .product-category summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .product-category summary::after {
+            content: '\25be';
+            float: right;
+            transition: transform 0.2s ease;
+        }
+
+        .product-category[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .product-list {
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .product-list ul {
+            margin-left: 1rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
         .gallery-item {
             width: 260px; /* Adjusted width */
             background: white;
@@ -300,7 +349,50 @@
     <section class="Our-Products">
         <div class="container">
             <h2>Our Products</h2>
-                <!-- Gallery Section -->
+            <div class="product-dropdowns">
+                <details class="product-category" open>
+                    <summary>Tables</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>8 ft Rectangle Banquet Tables</li>
+                            <li>Round Tables (coming soon)</li>
+                            <li>Kid-sized Tables</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="product-category">
+                    <summary>Chairs</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Standard Folding Chairs</li>
+                            <li>Padded Event Chairs</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="product-category">
+                    <summary>Bouncy Houses</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Classic Castle Jumper</li>
+                            <li>Toddler-Friendly Jumper</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="product-category">
+                    <summary>Heaters</summary>
+                    <div class="product-list">
+                        <ul>
+                            <li>Patio Heaters</li>
+                            <li>Propane Tanks (available with rental)</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Gallery Section -->
             <div class="gallery">
                 <div class="gallery-item">
                     <img src="images/Tables-Chairs-8-ft-Long-Table.jpg" alt="Chairs and Tables">
