@@ -334,7 +334,7 @@
 <body>
     <header>
         <h1>🎉 Elian Rentals</h1>
-        <p>Seamless party rentals with instant cart and quick checkout—no login needed.</p>
+        <p>Seamless party rentals with instant cart and quick checkout</p>
     </header>
 
     <main class="container">
@@ -413,7 +413,7 @@
             </div>
             <div class="info-card">
                 <h3>Dependable delivery</h3>
-                <p>Schedule the drop-off time that works for you. We handle set up for tables, chairs, heaters, and the jumper.</p>
+                <p>Schedule the drop-off time that works for you. We handle set up for heaters, and the jumper.</p>
             </div>
             <div class="info-card">
                 <h3>Clean & party-ready</h3>
@@ -429,7 +429,7 @@
 
     <script>
         const BACKEND_URL = "https://elianrentals.onrender.com";
-
+        const BACKEND_URL_LOCAL = "http://localhost:3000";
         const products = [
             {
                 id: "table-8ft",
@@ -634,7 +634,7 @@
             };
 
             try {
-                const response = await fetch(`${BACKEND_URL}/request-estimate`, {
+                const response = await fetch(`${BACKEND_URL_LOCAL}/request-estimate`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),
